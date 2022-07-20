@@ -1,0 +1,68 @@
+---
+title: "My first Rmd"
+author: "yamur"
+date: "2022-07-20"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r library_calls, message=FALSE, echo=FALSE}
+library(tidyverse)
+library(data.table)
+library(rmarkdown)
+```
+
+## R Markdown
+
+A bulleted list with sub-bullets under at least one item
+
+* Item 1
+* Item 2
+    + *Item 2a*
+    + **Item 2b**
+
+A numbered list
+
+1. Item 1
+2. Item 2
+3. Item 3
+    + Item 3a
+    + Item 3b
+
+### Data
+
+The results of some R code without showing the code
+
+Cars
+```{r cars, echo=FALSE}
+summary(cars)
+```
+
+## Including Plots
+A plot (show the code that generates the plot)
+You can also embed plots, for example:
+```{r pressure}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+## Table
+
+First Header  | Second Header
+------------- | -------------
+Content Cell  | Content Cell
+Content Cell  | Content Cell
+Reference Style Links and Images
+
+
+### My computer
+```{r sessionInfo, message=FALSE}
+sessionInfo()
+```
+
+
