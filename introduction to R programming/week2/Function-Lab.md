@@ -1,0 +1,178 @@
+Functions Lab
+================
+
+##### Assignment Instructions
+
+Complete all questions below. After completing the assignment, knit your
+document, and download both your .Rmd and knitted output. Upload your
+files for peer review.
+
+For each response, include comments detailing your response and what
+each line does. Ensure you test your functions with sufficient test
+cases to identify and correct any potential bugs.
+
+------------------------------------------------------------------------
+
+##### Question 1.
+
+Review the roll functions from Section 2 in *Hands-On Programming in R*.
+Using these functions as an example, create a function that produces a
+histogram of 50,000 rolls of three 8 sided dice. Each die is loaded so
+that the number 7 has a higher probability of being rolled than the
+other numbers, assume all other sides of the die have a 1/10 probability
+of being rolled.
+
+Your function should contain the arguments `max_rolls`, `sides`, and
+`num_of_dice`. You may wish to set some of the arguments to default
+values.
+
+``` r
+roll <- function(num_of_dice = 3, max_rolls=50000, sides = 1:8) {
+  # setup empty probs vector
+  probs <- rep(NA, length(sides))
+  
+  # set average prob if length less than 7
+  if(length(sides) < 7 ){
+    prob <- 1/length(sides)
+  } else{
+    # otherwise set prob to 1/10 and the set the rest to the prob_at_7
+    prob <- 1/10
+    prob_at_7 <- 1-prob*(length(sides)-1)
+  }
+  
+  # assign the probs for each side
+  for(i in sides){
+    if(i == 7){
+      probs[i] <- prob_at_7
+    } else{
+      probs[i] <- prob
+    }
+  }
+  
+  # setup one_roll function that return the sum of all dices
+  one_roll <- function(){
+    one_sample <- sample(sides, num_of_dice, replace = TRUE,prob = probs)
+    sum(one_sample)
+  }
+  
+  # roll max_rolls times that should give a vector of all sum results
+  rolls <- replicate(max_rolls, one_roll())
+  
+  # draw the histogram
+  qplot(rolls, binwidth = 1)
+}
+
+roll()
+```
+
+![](Function-Lab_files/figure-gfm/weighted%20dice-1.png)<!-- -->
+
+##### Question 2.
+
+Write a function, rescale01(), that recieves a vector as an input and
+checks that the inputs are all numeric. If the input vector is numeric,
+map any -Inf and Inf values to 0 and 1, respectively. If the input
+vector is non-numeric, stop the function and return the message “inputs
+must all be numeric”.
+
+Be sure to thoroughly provide test cases. Additionally, ensure to allow
+your response chunk to return error messages.
+
+``` r
+rescale01 <- function(v){
+  if(!is.numeric(v)){
+    stop("inputs must all be numeric")
+  }
+  rng <- range(v, na.rm=FALSE,finite = TRUE)
+  v <- (v-rng[1])/(rng[2]-rng[1])
+  # -Inf is mapped to 0 and Inf is mapped to 1.
+  ifelse(is.finite(v), v, ifelse(v > 0, 1, 0))
+}
+
+x <- c(1:10,-Inf, Inf)
+rescale01(x)
+```
+
+    ##  [1] 0.0000000 0.1111111 0.2222222 0.3333333 0.4444444 0.5555556 0.6666667
+    ##  [8] 0.7777778 0.8888889 1.0000000 0.0000000 1.0000000
+
+##### Question 3.
+
+Write a function that takes two vectors of the same length and returns
+the number of positions that have an NA in both vectors. If the vectors
+are not the same length, stop the function and return the message
+“vectors must be the same length”.
+
+``` r
+# one line solution (for loop would also do the job but not efficient)
+both_na <- function(x, y){
+  if(!length(x)==length(y)){
+    stop("vectors must be the same length")
+  }
+  which(is.na(x) & is.na(y))
+}
+
+
+x <- c(0, 1, NA, NA, NA, 3, -4, NA)
+y <- c(-3, NA, 0, NA, NA, NA, 0, 1)
+both_na(x,y)
+```
+
+    ## [1] 4 5
+
+##### Question 4
+
+Implement a fizzbuzz function. It takes a single number as input. If the
+number is divisible by three, it returns “fizz”. If it’s divisible by
+five it returns “buzz”. If it’s divisible by three and five, it returns
+“fizzbuzz”. Otherwise, it returns the number.
+
+``` r
+fizzbuzz <- function(x){
+  if (x %% 3 == 0) {
+    return("fizz")
+  }
+  if (x %% 5 == 0) {
+    return("buzz")
+  }
+  if (x %% 3 == 0 & x %% 5 == 0) {
+    return("fizzbuzz")
+  }
+  return(x)
+}
+
+assert("something went wrong",{
+  fizzbuzz(3) == "fizz"
+  fizzbuzz(5) == "buzz"
+  fizzbuzz(15) == "fizzbuzz"
+  fizzbuzz(4) == 4
+})
+```
+
+##### Question 5
+
+Rewrite the function below using `cut()` to simplify the set of nested
+if-else statements.
+
+    get_temp_desc <- function(temp) {
+      if (temp <= 0) {
+        "freezing"
+      } else if (temp <= 10) {
+        "cold"
+      } else if (temp <= 20) {
+        "cool"
+      } else if (temp <= 30) {
+        "warm"
+      } else {
+        "hot"
+      } 
+    }
+
+``` r
+x = c(-30,5,15,25,35)
+cut(x, breaks = c(-Inf, 0, 10, 20, 30, Inf),
+    labels = c("freezing", "cold", "cool", "warm", "hot"))
+```
+
+    ## [1] freezing cold     cool     warm     hot     
+    ## Levels: freezing cold cool warm hot
