@@ -1,6 +1,6 @@
 ---
 title: "Functions Lab"
-output: pdf_document
+output: github_document
 ---
 
 ##### Assignment Instructions
