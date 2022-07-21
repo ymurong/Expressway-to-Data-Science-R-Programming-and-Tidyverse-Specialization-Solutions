@@ -1,4 +1,4 @@
-Week2 Practice Problems
+Problem Set 1
 ================
 yamur
 2022-07-20
@@ -9,7 +9,10 @@ library("ggplot2")
 
 ## Problem Set 1
 
-### Review Sections 2.1-2.5 from Hands-On Programming in R and complete the following exercises:
+#### Question 1.
+
+Write a roll function that simulates rolling two six-sided die. The
+function should contain no input arguments.
 
 ``` r
 roll <- function() {
@@ -19,9 +22,15 @@ roll <- function() {
 }
 ```
 
+#### Question 2.
+
+Rewrite the roll function to include an argument for the type of die
+(e.g. three-, six-, eight-sided). Think about what other input arguments
+should be allowed. How would you update your function to include them?
+
 ``` r
-roll2 <- function(bones=1:6) {
-  dice <- sample(bones, size = 2, replace = TRUE)
+roll2 <- function(bones=1:6, size=3) {
+  dice <- sample(bones, size, replace = TRUE)
   sum(dice)
 }
 ```
@@ -35,15 +44,14 @@ roll2()
     ## [1] 10
 
 ``` r
-roll2(1:4)
+roll2(bones=1:4)
 ```
 
-    ## [1] 7
+    ## [1] 8
 
-### Review Sections 3.1 - 3.4 from Hands-On Programming in R and complete the following exercises
+#### Question 3.
 
-In a new code chunk in your Rmd file, produce a histogram of 50,000
-rolls of three 8 sided fair dice.
+Produce a historgram of 50,000 rolls of three eight-sided fair dice.
 
 ``` r
 roll3 <- function(bones=1:8, size=2) {
@@ -54,19 +62,22 @@ roll3 <- function(bones=1:8, size=2) {
 roll3(bones = 1:8, size=3)
 ```
 
-    ## [1] 12
+    ## [1] 9
 
 ``` r
 # qplot makes a histogram when you give it a single vector.
-rolls3 <- replicate(10000, roll3())
+rolls3 <- replicate(50000, roll3())
 qplot(rolls3, binwidth = 1)
 ```
 
-![](Week2-PracticeProblems_files/figure-gfm/qplot-1.png)<!-- -->
+![](Problem-Set-1_files/figure-gfm/qplot-1.png)<!-- -->
 
-Then do the same thing where the dice are loaded so that the number 7
-has a higher probability of being rolled than the other numbers, assume
-all the other numbers have a 1/10 probability of being rolled.
+#### Question 4.
+
+Produce a historgram of 50,000 rolls of three eight-sided dice where the
+dice are loaded so that the number 7 has a higher probability of being
+rolled than the other numbers, assume all the other numbers have a 1/10
+probability of being rolled.
 
 ``` r
 roll4 <- function() {
@@ -79,13 +90,13 @@ roll4 <- function() {
 
 ``` r
 # qplot makes a histogram when you give it a single vector.
-rolls4 <- replicate(10000, roll4())
+rolls4 <- replicate(50000, roll4())
 qplot(rolls4, binwidth = 1)
 ```
 
-![](Week2-PracticeProblems_files/figure-gfm/weighted%20dice%20qplot-1.png)<!-- -->
+![](Problem-Set-1_files/figure-gfm/weighted%20dice%20qplot-1.png)<!-- -->
 
-### Finally
+#### Question 5.
 
 Rewrite the “rescale01()” function such that -Inf is mapped to 0 and Inf
 is mapped to 1.
@@ -103,6 +114,8 @@ rescale01(x)
 
     ##  [1] 0.0000000 0.1111111 0.2222222 0.3333333 0.4444444 0.5555556 0.6666667
     ##  [8] 0.7777778 0.8888889 1.0000000 0.0000000 1.0000000
+
+#### Question 6.
 
 Write both_na(), a function that takes two vectors of the same length
 and returns the number of positions that have an NA in both vectors.

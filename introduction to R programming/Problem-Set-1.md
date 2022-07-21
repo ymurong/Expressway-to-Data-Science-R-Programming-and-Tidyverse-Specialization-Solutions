@@ -41,13 +41,13 @@ roll2 <- function(bones=1:6, size=3) {
 roll2()
 ```
 
-    ## [1] 10
+    ## [1] 13
 
 ``` r
 roll2(bones=1:4)
 ```
 
-    ## [1] 8
+    ## [1] 10
 
 #### Question 3.
 
@@ -62,7 +62,7 @@ roll3 <- function(bones=1:8, size=2) {
 roll3(bones = 1:8, size=3)
 ```
 
-    ## [1] 9
+    ## [1] 7
 
 ``` r
 # qplot makes a histogram when you give it a single vector.
