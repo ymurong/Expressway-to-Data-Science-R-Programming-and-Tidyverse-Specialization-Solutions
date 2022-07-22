@@ -1,0 +1,55 @@
+---
+title: "Data Visualization Lab"
+output: pdf_document
+---
+
+##### Assignment Instructions
+
+In this assignment you will recreate five graphs using ggplot2 and the mpg dataset. You will need to run the code block for each question to view the graph you will need to reproduce. 
+
+After completing the assignment, knit your document, and download both your .Rmd and knitted output. Upload your files for peer review. 
+
+For each response, include comments detailing your response and what each argument in the ggplot function does. 
+
+```{r lib}
+library(ggplot2)
+```
+##### Question 1.
+
+```{r question-1-response}
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point() +
+  geom_smooth()
+```
+
+##### Question 2.
+
+```{r question-2-response}
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point(mapping = aes(color=drv)) +
+  geom_smooth(se = FALSE)
+```
+
+##### Question 3.
+
+
+```{r question-3-response}
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point(mapping = aes(color=drv)) +
+  geom_smooth(aes(linetype = drv), se = FALSE)
+```
+
+##### Question 4.
+
+```{r question-4-response}
+ggplot(data = mpg, mapping = aes(x = cty, y = hwy)) +
+  geom_point(mapping = aes(color=class),position = "jitter")
+```
+
+##### Question 5.
+
+```{r question-5-response}
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = hwy, y = cyl),shape=17, color="orange") +
+   facet_wrap(~class, nrow = 3)
+```
