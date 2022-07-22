@@ -22,6 +22,7 @@ Using the nycflights13 data, calculate a new variable called "hr_delay" and arra
 ```{r}
 flights %>%
   mutate(hr_delay = arr_delay / 60 + dep_delay / 60 ) %>%
+  arrange(desc(arr_delay)) %>%
   relocate(hr_delay, .before = dep_time)
 ```
 #### Question 2. 
