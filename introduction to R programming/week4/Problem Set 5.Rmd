@@ -1,0 +1,36 @@
+---
+title: "Problem Set 5"
+output: github_document
+---
+
+### Introduction
+
+Reference the [tidyverse style guide](https://style.tidyverse.org/) while completing the exercises. 
+
+These exercises are ungraded.
+
+```{r lib, echo=FALSE}
+library(tidyverse)
+library(nycflights13)
+library(dplyr)
+```
+
+#### Question 1. 
+
+Using the nycflights13 data, calculate a new variable called "hr_delay" and arrange the flights dataset in order of the arrival delays in hours (longest delays at the top). Put the new variable you created just before the departure time. Hint: use the experimental argument .before. 
+
+```{r}
+flights %>%
+  mutate(hr_delay = arr_delay / 60 + dep_delay / 60 ) %>%
+  relocate(hr_delay, .before = dep_time)
+```
+#### Question 2. 
+
+What proportion of flights in nycflights13 are delayed by more than on hour? 
+
+```{r}
+flights %>%
+  filter((arr_delay+dep_delay)/60>1) %>%
+  nrow() / nrow(flights)
+```
+

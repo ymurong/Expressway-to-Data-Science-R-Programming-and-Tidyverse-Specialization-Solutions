@@ -1,0 +1,114 @@
+---
+title: "Problem Set 4"
+output: github_document
+---
+
+### Introduction
+
+Reference the [tidyverse style guide](https://style.tidyverse.org/) while completing the exercises. 
+
+These exercises are ungraded.
+
+```{r lib, echo=FALSE}
+library(tidyverse)
+library(hflights)
+library(nycflights13)
+library(dplyr)
+```
+
+#### Question 1. 
+
+Use the following definitions of cancellation codes to add a "Code" column to hflights, then use tail(hflights$Code[!is.na(hflights$Code)], n = 20) to see that your replacement worked by looking at the last 20 entries that are not NA. 
+
+"A"   =    "carrier"
+"B"  =    "weather"
+"C"   =   "FF"
+"D"   =   "security"
+"E"   =   "not cancelled"
+
+```{r}
+lut <- c("A" = "carrier", "B"  =    "weather", "C"   =   "FF", "D"   =   "security", "E"   =   "not cancelled")
+hflights$Code <- lut[hflights$CancellationCode]
+tail(hflights$Code[!is.na(hflights$Code)], n = 20)
+```
+
+#### Question 2. 
+
+What does the any_of() function do? Why might it be helpful in conjunction with this vector when analyzing nycflights13 data?
+
+`vars <- c("year", "month", "day", "dep_delay", "arr_delay")`
+
+any_of() is especially useful to remove variables from a data frame because calling it again does not cause an error:
+
+#### Question 3. 
+
+Does the result of running the following code surprise you? How does the select helpers deal with case by default? How can you change that default?
+
+`select(flights, contains("TIME", ignore.case=FALSE))`
+
+CASE INSENSIBLE, USE ignore.case=FALSE 
+
+#### Question 4. 
+
+Use select to show only the columns of hflights that have the word time or delay in the variable name or have the carrier id.
+
+```{r}
+select(flights, contains("TIME") | contains("DELAY") | contains ('CARRIER'))
+```
+
+#### Question 5. 
+
+Find all flights from nycflights13 that had an arrival delay of two or more hours. Put the arrival delay first in your output so you can check it.
+
+```{r}
+flights %>%
+  filter(arr_delay / 60 >= 2) %>%
+  select(arr_delay, everything()) %>%
+  arrange(desc(arr_delay))
+```
+#### Question 6. 
+
+Find all flights from nycflights13 that were operated by United, American, or Delta.
+```{r}
+flights %>%
+  filter(carrier %in% c('AA','UA','DL'))
+```
+
+
+#### Question 7.
+
+Find all flights from nycflights13 that arrived more than two hours late.
+
+```{r}
+flights %>%
+  filter(arr_delay / 60 >= 2) %>%
+  select(arr_delay, everything()) %>%
+  arrange(desc(arr_delay))
+```
+
+#### Question 8. 
+
+Find all flights from nycflights13 that had a departure delay by at least an hour
+
+```{r}
+flights %>%
+  filter(dep_delay / 60 >= 1) %>%
+  select(dep_delay, everything()) %>%
+  arrange(desc(dep_delay))
+```
+
+#### Question 9. 
+
+Sort flights from nycflights13 to find the 5 most flights whose arrival was delayed the longest. Find the 5 flights that left earliest (most ahead of scheduled departure time). 
+
+```{r}
+flights %>%
+  select(arr_delay, everything()) %>%
+  arrange(desc(arr_delay)) %>%
+  head(5)
+
+flights %>%
+  select(dep_delay, everything()) %>%
+  arrange(dep_delay) %>%
+  head(5)
+```
