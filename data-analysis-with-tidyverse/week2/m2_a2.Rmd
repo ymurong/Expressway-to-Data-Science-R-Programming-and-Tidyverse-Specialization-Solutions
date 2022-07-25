@@ -1,0 +1,138 @@
+---
+title: "Tidying Data Practice"
+output: github_document
+---
+
+##### Libraries
+Load the tidyverse library
+```{r}
+library(tidyverse)
+```
+
+##### Question 1. 
+The following built-in datasets are not tidy. For each one, describe why it is not tidy, write out what the first five entries would look like once it is in a tidy format, and then tidy the dataset 
+
+a.relig_income
+b.billboard
+c.us_rent_income
+
+```{r}
+# relig_income
+# a row should only contain one observation
+
+relig_income %>%
+    pivot_longer(!religion, names_to = "income", values_to = "count")
+
+# billboard
+# a row should only contain one observation
+
+billboard %>%
+  pivot_longer(
+    cols = starts_with("wk"),
+    names_to = "week",
+    names_prefix = "wk",
+    values_to = "rank",
+    values_drop_na = TRUE
+  )
+
+
+# us_rent_income
+
+us_rent_income %>%
+  pivot_wider(
+    names_from = variable,
+    names_glue = "{variable}_{.value}",
+    values_from = c(estimate, moe)
+  )
+```
+
+##### Question 2.
+2.Use "pivot_longer" to tidy the built-in table4b dataset
+
+```{r question-2-response}
+table4b %>% 
+  pivot_longer(
+    -country,
+    names_to = "year",
+    values_to = "population",
+  )
+
+```
+
+##### Question 3. 
+3.Import and tidy the monkeymen dataset. The cell values represent identification accuracy of some objects (in percent of 20 trials).
+
+```{r question-3-response}
+monkeymem <- read_csv(
+  "monkeymem.csv", 
+  col_types = cols(
+    Monkey = col_character(),
+    Treatment = col_factor(levels = c("Control","Treated"))
+  )
+)
+
+monkeymem %>% 
+  pivot_longer(
+    cols = starts_with("Week"),
+    names_to = "Week",
+    names_prefix = "Week",
+    values_to = "Accuracy",
+  )
+```
+
+##### Question 4. 
+4. As explained in the lecture video load and tidy the built in world_bank_pop data frame
+
+```{r question-4-response}
+world_bank_pop %>% 
+  pivot_longer(
+    cols = starts_with("20"),
+    names_to = "Year",
+    values_to = "Population",
+  )
+```
+
+##### Question 5.
+1.  In the following data set, turn the implicit missing values to explicit.
+
+```{r}
+output <- tibble(
+      treatment   = c("a", "b", "a", "c", "b"),
+      gender   = factor(c("M", "F", "F", "M", "M"), levels = c("M", "F", "O")),
+      return = c(1.5, 0.75,  0.5,  1.8,  NA)
+    )
+output  %>%
+  complete(treatment, gender)
+```
+
+##### Question 6.
+Read the dataset available at "https://raw.githubusercontent.com/JaneWall/data_STAT412612/master/weather.csv" as weather. 
+
+Use "pivot_longer()" to to put the days all in one column, then use "pivot_wider" to separate tmax and tmin into separate columns. Print the summary of the final resulting dataset.
+
+```{r}
+weather <- read_csv(url("https://raw.githubusercontent.com/JaneWall/data_STAT412612/master/weather.csv"))
+weather %>% 
+  pivot_longer(
+    cols = starts_with("d"),
+    names_to = "Day",
+    values_to = "Temp",
+  )  %>% 
+  pivot_wider(
+    names_from = element,
+    values_from = c(Temp)
+  )
+
+```
+
+##### Question 7.
+Load the built in "anscombe" data frame and use "pivot_longer()" to separate all the x and y columns and categorize them into 4 sets.
+
+```{r}
+anscombe %>%
+  pivot_longer(
+    everything(),
+    names_to = c(".value", "set"),
+    names_pattern = "(.)(.)"
+  )
+```
